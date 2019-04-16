@@ -59,9 +59,11 @@ def main():
     while not game_over:
         cenario_atual = cenarios[nome_cenario_atual]
 
-        # Aluno A: substitua este comentário pelo código para imprimir 
-        # o cenário atual.
-
+        print("Dilema da catraca")
+        print("-----------------")
+        print("Você chegou no Insper e está do lado da catraca quando você descobre que esqueceu a carteirinha")
+        print()
+        
         opcoes = cenario_atual['opcoes']
         if len(opcoes) == 0:
             print("Acabaram-se suas opções! Mwo mwo mwooooo...")
