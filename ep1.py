@@ -98,8 +98,8 @@ def main():
                 print()
                 while vida_rugby_pequeno>0:
                     print('Você tem {0} de vida'.format(vida))
-                    escolha= input('Você quer: atacar | fugir? ')
-                    if escolha == 'atacar':
+                    escolha= input('Você quer: Atacar | Fugir? ')
+                    if escolha == 'Atacar':
                         vida_rugby_pequeno= vida_rugby_pequeno - dano_seu
                         print()
                         if vida_rugby_pequeno>0:
@@ -109,11 +109,17 @@ def main():
                             print('Você agora tem {0} de vida'.format(vida))
                         elif vida_rugby_pequeno <= 0:
                             print('Você matou o jogador de rugby e agora pode seguir adiante, mas cuidado, agora tem um time todo de rugby atrás de você!')
-                    elif escolha == 'fugir':
+                            print()
+                            print('Após vencer o jogador de rugby você pega o seu protetor bucal. Agora você tem 150 de vida!')
+                            vida= 150
+                    elif escolha == 'Fugir':
                         print()
                         print(cenarios['briga_consequencias']['Fugir'])
                         game_over=True
                         vida_rugby_pequeno= 0
+    
+
+
     else:
         print('Você perdeu :(')
         game_over = True
