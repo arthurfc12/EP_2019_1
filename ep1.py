@@ -39,12 +39,12 @@ print()
 def main():
     game_over = False
     vida= 100
-    dano_seu= random.randint(10, 40)
+    dano_seu= random.randint(10, 41)
     vida_rugby_pequeno = 20
-    dano_rugby_pequeno = random.randint(1, 10)
-    azar= random.randint(0,5)
+    dano_rugby_pequeno = random.randint(1, 11)
+    azar= random.randint(0,6)
     bola= False
-    dano_bola= random.randint(20,60)
+    dano_bola= random.randint(20,61)
     
     
 ########################## CENA 1 #############################################
@@ -127,6 +127,7 @@ def main():
                         print(cenarios['briga_consequencias']['Fugir'])
                         game_over=True
                         vida_rugby_pequeno= 0
+                vida_rugby_pequeno = 20
         else:
             print()
             print('Como a sua escolha não estava nas opções ou você não sabe escrever direito você morreu de um ataque cardíaco repentino.')
@@ -136,6 +137,42 @@ def main():
     print()
     print()
         
+########################## SUBCENA ############################################
+    
+    if azar < 2:
+        print('No caminho para a sala você encontra um jogador de rugby, que esta puto com você. Sua única escolha é lutar.')
+        print()
+        print('O jogador de rugby te bateu de surpresa!')
+        print()
+        vida= vida- dano_rugby_pequeno
+        while vida_rugby_pequeno>0 and not game_over:
+            print('Você tem {0} de vida'.format(vida))
+            escolha= input('Você quer: Atacar | Fugir? ')
+            if escolha == 'Atacar':
+                vida_rugby_pequeno= vida_rugby_pequeno - dano_seu
+                print()
+                if vida_rugby_pequeno>0:
+                    print('O jogador de rugby agora tem {} de vida'.format(vida_rugby_pequeno))
+                    print()
+                    print('O jogador de rugby te bateu!')
+                    vida= vida - dano_rugby_pequeno
+                    if vida<0:
+                        print('O jogador de rugby te matou :(')
+                        game_over=True
+                elif vida_rugby_pequeno <= 0:
+                    print('Você matou o jogador de rugby e agora pode seguir adiante!')
+                    print()
+            elif escolha == 'Fugir':
+                print()
+                print(cenarios['briga_consequencias']['Fugir'])
+                game_over=True
+                vida_rugby_pequeno= 0
+            else:
+                 print()
+                 print('Como a sua escolha não estava nas opções ou você não sabe escrever direito você morreu de um ataque cardíaco repentino.')
+                 game_over=True
+        vida_rugby_pequeno = 20
+
 ########################## CENA 3 #############################################
         
     if not game_over:
@@ -168,6 +205,7 @@ def main():
             print()
             print('Como a sua escolha não estava nas opções ou você não sabe escrever direito você morreu de um ataque cardíaco repentino.')
             game_over=True
+
 
         
 print(main())
