@@ -14,7 +14,12 @@ cenarios = {
         'bola_consequencias': {'Arriscar1': 'Você consegui pegar a bola sem ninguem te encher o saco! Vai ser uma potente arma nas suas batalhas.',
                                'Arriscar2': 'A professora viu você atrapalhando a aula e te mandou para o diretor que te jubilou do Insper.',
                                'Relevar': 'Você não pegou a bola, mas nada de ruim aconteceu contigo pelo menos!'},
-        
+        'direcao_opcoes':{'Esquerda': 'Você vira a esquerda no corredor',
+                          'Direita': 'Você vira a direita no corredor'},
+        'direcao_consequencias': {'Esquerda': 'Você encontra um jaleco! O jaleco faz com que você possa fugir de uma luta uma única vez. Para fazer isso é só escrever Inventario durante uma luta e selecionar o jaleco que você poderá fugir!',
+                                  'Direita': 'Você acaba na sala de IntruMed onde você encontra um capacitor. Você percebe que a qualquer momento de uma luta você pode usa-lo para aumentar sua vida, mas somente uma vez! Para fazer isso é só escrever Inventario e seleciona-lo'},
+        'inventario': {'Capacitor': 'Sua vida aumentou 50 pontos!',
+                       'Jaleco': 'Voce fugiu da luta após colocar o jaleco pois os jogadores confundiram você com um mecânico'},
         
         }
 
@@ -47,6 +52,8 @@ def main():
     dano_bola= random.randint(20,61)
     vida_rugby_titular = 40
     dano_rugby_titular = random.randint(8, 21)
+    inventário = ['Sair']
+    direcionador = 0
     
 ########################## CENA 1 #############################################
 
@@ -147,7 +154,7 @@ def main():
             print('O jogador de rugby te bateu de surpresa!')
             print()
             vida= vida- dano_rugby_pequeno
-            while vida_rugby_pequeno>0 and not game_over:
+            while vida_rugby_pequeno>0 and vida>0 and not game_over:
                 print('Você tem {0} de vida'.format(vida))
                 escolha= input('Você quer: Atacar | Fugir? ')
                 if escolha == 'Atacar':
@@ -207,7 +214,8 @@ def main():
             print()
             print('Como a sua escolha não estava nas opções ou você não sabe escrever direito você morreu de um ataque cardíaco repentino.')
             game_over=True
-
+        print()
+        
 ########################## SUBCENA 2 ##########################################
 
     if not game_over:
@@ -247,5 +255,104 @@ def main():
                     print('Como a sua escolha não estava nas opções ou você não sabe escrever direito você morreu de um ataque cardíaco repentino.')
                     game_over=True
             vida_rugby_titular = 40
-        
+
+########################## CENA 4 #############################################
+
+    if not game_over:
+        print()
+        print('Esquerda ou Direita')
+        print('-------------------')
+        print()
+        print('Saindo da sala que você usualmente tem DesSoft você vê que tem a opção de ir ou para a esquerda no corredor ou para a direita')
+        print()
+        print('As suas opções são: ')
+        print()
+        opcoes= cenarios['direcao_opcoes'].keys()
+        for key, value in cenarios['direcao_opcoes'].items():
+            print("{}: {}".format(key, value))
+            print()
+        escolha = input("Qual é a sua escolha? ")
+        if escolha in opcoes:
+            if escolha == 'Direita':
+                print()
+                print(cenarios['direcao_consequencias']['Direita'])
+                inventário.append('Capacitor')
+            elif escolha == 'Esquerda':
+                print()
+                print(cenarios['direcao_consequencias']['Esquerda'])
+                inventário.append('Jaleco')
+        else:
+            print()
+            print('Como a sua escolha não estava nas opções ou você não sabe escrever direito você morreu de um ataque cardíaco repentino.')
+            game_over=True
+        print()
+
+########################## SUBCENA 3 ##########################################
+
+    if not game_over:
+        if azar < 10:
+            print('Indo para o seu próximo destino você encontra um jogador de rugby. Desta vez voce encontra um jogador titular do time, que é mais grande e forte que os anteriores, e você tem que lutar!')
+            print()
+            print('O jogador de rugby te bateu de surpresa!')
+            print()
+            vida= vida- dano_rugby_titular
+            while vida_rugby_titular>0 and not game_over:
+                print('Você tem {0} de vida'.format(vida))
+                escolha= input('Você quer: Atacar | Fugir | Inventario? ')
+                if escolha == 'Atacar':
+                    if not bola:
+                        vida_rugby_titular= vida_rugby_titular - dano_seu
+                    else:
+                        vida_rugby_titular= vida_rugby_titular - dano_bola
+                    print()
+                    if vida_rugby_titular>0:
+                        print('O jogador de rugby agora tem {} de vida'.format(vida_rugby_titular))
+                        print()
+                        print('O jogador de rugby te bateu!')
+                        vida= vida - dano_rugby_titular
+                        if vida<0:
+                            print('O jogador de rugby te matou :(')
+                            game_over=True
+                    elif vida_rugby_titular <= 0:
+                        print('Você matou o jogador de rugby e agora pode seguir adiante!')
+                        print()
+                elif escolha == 'Fugir':
+                    print()
+                    print(cenarios['briga_consequencias']['Fugir'])
+                    game_over=True
+                    vida_rugby_titular= 0
+                elif escolha == 'Inventario':
+                    print()
+                    print(inventário)
+                    escolha=input('Que item você deseja escolher? ')
+                    if escolha in inventário:
+                        if escolha == 'Jaleco':
+                            print()
+                            print(cenarios['inventario']['Jaleco'])
+                            vida_rugby_titular=0
+                            inventário.remove('Jaleco')
+                        elif escolha == 'Capacitor':
+                            print()
+                            print(cenarios['inventario']['Capacitor'])
+                            vida = vida +50
+                            print('Você agora tem {0} de vida'.format(vida))
+                            inventário.remove('Capacitor')
+                        elif escolha == 'Sair':
+                            print()
+                            escolha= input('Você quer: Atacar | Fugir | Inventario? ')
+                    else:
+                        print()
+                        print('Ou esse item não existe ou você escreveu errado. Tente novamente')
+                        escolha= input('Você quer: Atacar | Fugir | Inventario? ')
+                        
+                    
+                    
+                    
+                    
+                else:
+                    print()
+                    print('Como a sua escolha não estava nas opções ou você não sabe escrever direito você morreu de um ataque cardíaco repentino.')
+                    game_over=True
+            vida_rugby_titular = 40
+    
 print(main())
