@@ -148,7 +148,7 @@ def main():
 ########################## SUBCENA 1 ##########################################
     
     if not game_over:
-        if azar < 2:
+        if azar < 3:
             print('Indo para o seu próximo destino você encontra um jogador de rugby, que esta puto com você pelo que você fez com o amigo dele. Sua única escolha é lutar.')
             print()
             print('O jogador de rugby te bateu de surpresa!')
@@ -219,7 +219,7 @@ def main():
 ########################## SUBCENA 2 ##########################################
 
     if not game_over:
-        if azar < 2:
+        if azar < 3:
             print('Indo para o seu próximo destino você encontra um jogador de rugby. Desta vez voce encontra um jogador titular do time, que é mais grande e forte que os anteriores, e você tem que lutar!')
             print()
             print('O jogador de rugby te bateu de surpresa!')
@@ -290,7 +290,7 @@ def main():
 ########################## SUBCENA 3 ##########################################
 
     if not game_over:
-        if azar < 10:
+        if azar < 3:
             print('Indo para o seu próximo destino você encontra um jogador de rugby. Desta vez voce encontra um jogador titular do time, que é mais grande e forte que os anteriores, e você tem que lutar!')
             print()
             print('O jogador de rugby te bateu de surpresa!')
@@ -344,15 +344,14 @@ def main():
                         print()
                         print('Ou esse item não existe ou você escreveu errado. Tente novamente')
                         escolha= input('Você quer: Atacar | Fugir | Inventario? ')
-                        
-                    
-                    
-                    
-                    
                 else:
                     print()
                     print('Como a sua escolha não estava nas opções ou você não sabe escrever direito você morreu de um ataque cardíaco repentino.')
                     game_over=True
             vida_rugby_titular = 40
     
+########################## CENA 5 #############################################
+
+
+
 print(main())
