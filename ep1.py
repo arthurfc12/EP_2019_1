@@ -1,4 +1,5 @@
 from numpy import random
+import pygame
 
 cenarios = {
         'catraca_opcoes': {"Paquerar segurança": "Você tentará cortejar a/o segurança usando seu charme para te deixar passar sem a carteirinha", 
@@ -20,8 +21,15 @@ cenarios = {
                                   'Direita': 'Você acaba na sala de IntruMed onde você encontra um capacitor. Você percebe que a qualquer momento de uma luta você pode usa-lo para aumentar sua vida, mas somente uma vez! Para fazer isso é só escrever Inventario e seleciona-lo'},
         'inventario': {'Capacitor': 'Sua vida aumentou 50 pontos!',
                        'Jaleco': 'Voce fugiu da luta após colocar o jaleco pois os jogadores confundiram você com um mecânico'},
-        
+        'teleporte_opcoes':{'Catraca':'Você volta para o local do começo da jornada', 'DSoft':'Você volta para a sala de DSoft', 'Corredor':'Você volta ao corredor do quarto andar e continua sua jornada',},
+        'teleporte_consequencias':{'Catraca':'Ao chegar na catraca você decide passar no balcão e acaba encontrando o recepcionista. Você tem direito a fazer uma pergunta a ele!', 'DSoft':'Você passa com mais cuidado na sala de DSoft e encontra um carregador, use-o apenas uma vez apenas para encontrar itens escondidos','Corredor':'Você decide não gastar mais tempo e segue rumo ao seu destino'},  
+        'balcao_opcoes':{'Historia':'O recepcionista irá te contar uma história inspiradora','Convencer':'você tentará convencer o recepcionista a te dar alguma coisa'},
+        'balcao_consequencias':{'Historia':'Você ainda é muito novo para ficar pegando DP garoto, siga seus sonhos e entregue o trabalho!!!','Convencer1':'O recepcionista te dá um fora','Convencer2':'O recepcionista te concebe um capacitor!'}
+
         }
+
+
+
 
 opcoes=[]
 escolha= "nenhuma"
@@ -36,12 +44,17 @@ print("Parecia uma boa idéia: vou só jogar um pouquinho/assistir Netflix/"
 print()
 print("É o dia de entregar o EP e você está muuuuito atrasado! Você está "
         "na entrada do Insper, e quer procurar o professor para pedir um "
-        "adiamento do EP (boa sorte...)")
+        "adiamento do EP (boa sorte)...")
 print()
 
 
 
 def main():
+    pygame.init()
+    pygame.display.set_mode((200,100))
+    pygame.mixer.music.load("SONIC.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(1)
     game_over = False
     vida= 100
     dano_seu= random.randint(10, 41)
@@ -53,7 +66,7 @@ def main():
     vida_rugby_titular = 40
     dano_rugby_titular = random.randint(8, 21)
     inventário = ['Sair']
-    direcionador = 0
+    resposta_recepcionista = random.randint(0,1)
     
 ########################## CENA 1 #############################################
 
@@ -352,6 +365,77 @@ def main():
     
 ########################## CENA 5 #############################################
 
+    if not game_over:
+        print("A aventura do herói continua em sua jornada pelo adiamento do EP de DSoft...")
+        print("Após sua luta com o jogador de Rugby, o herói tira uma pausa para descansar. Durante sua pausa, em meio à tudo que ocorreu até agora, o herói se lembra das dificuldades que teve que superar para chegar onde está agora.")
+        print("---------")
+        print("~Você agora terá a oportunidade de se teleportar para uma das salas que visitou até o momento e encontrar monstros, prêmios ou uma outra surpresa...~")
+        opcoes = cenarios['teleporte_opcoes'].keys()
+        for key, value in cenarios['teleporte_opcoes'].items():
+             print("{}: {}".format(key, value))
+             print()
+        escolha = input("Para onde desejas ir?")
+        if escolha in opcoes:
+            if escolha == 'DSoft':
+                print()
+                print(cenarios['teleporte_consequencias']['Dsoft'])
+                inventário.append("Carregador")
+            elif escolha == 'Catraca':
+                print()
+                print(cenarios['teleporte_consequencias']['Catraca'])
+                opcoes = cenarios['balcao_opcoes'].keys()
+                for key, value in cenarios['balcao_opcoes'].items():
+                    print("{}: {}".format(key, value))
+                    print()
+                escolha = input("O que desejas perguntar?")
+                if escolha in opcoes:
+                    if escolha == 'Historia':
+                        print()
+                        print(cenarios['balcao_consequencias']['Historia'])
+                    elif escolha == 'Convencer':
+                        print()
+                        if resposta_recepcionista == 1:
+                            print(cenarios['balcao_consequencias']['Convencer2'])
+                            inventário.append("Capacitor")
+                        else:
+                            print(cenarios['balcao_consequencias']['Convencer1'])
+            elif escolha == 'Corredor':
+                print()
+                print(cenarios['teleporte_consequencias']['Corredor'])
+        else:
+            print('Escreva certo da próxima vez...')
+            game_over = True
 
 
-print(main())
+                
+########################## CENA 6 #############################################
+    
+    
+    
+    if not game_over:
+        print()
+        print("Após sua breve pausa para teleportar para uma sala, o jogador decide voltar a embarcar na sua viajem para o adiamento do EP")
+        print("Apenas o futuro dirá como irá se desenrolar a história do nosso herói...")
+        print("Obrigado por jogar a primeira versão do jogo. Um agradecimento especial ao Dudu, que salvou demais no desenvolvimento do código e ao professor Toshi, que se tudo der certo nos concebe uma notinha boa ;) . Valeu!!")
+                        
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
