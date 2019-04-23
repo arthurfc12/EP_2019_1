@@ -50,6 +50,12 @@ print()
 
 
 def main():
+    arquivo_musica = 'SONIC.mp3'
+    pygame.init()
+    pygame.display.set_mode((200,100))
+    pygame.mixer.music.load(arquivo_musica)
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(1)
     game_over = False
     vida= 100
     dano_seu= random.randint(10, 41)
@@ -91,7 +97,10 @@ def main():
         vida_rugby_titular = 65
         dano_rugby_titular = random.randint(25, 37)
         vida_rugby_capitao = 160
-        dano_rugby_capitao = random.randint(45, 85)    
+        dano_rugby_capitao = random.randint(45, 85)
+        
+    else:
+        game_over = True
         
 ########################## CENA 1 #############################################
 
