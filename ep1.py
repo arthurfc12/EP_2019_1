@@ -1,5 +1,4 @@
 from numpy import random
-import pygame
 
 cenarios = {
         'catraca_opcoes': {"Paquerar segurança": "Você tentará cortejar a/o segurança usando seu charme para te deixar passar sem a carteirinha", 
@@ -21,11 +20,11 @@ cenarios = {
                                   'Direita': 'Você acaba na sala de IntruMed onde você encontra um capacitor. Você percebe que a qualquer momento de uma luta você pode usa-lo para aumentar sua vida, mas somente uma vez! Para fazer isso é só escrever Inventario e seleciona-lo'},
         'inventario': {'Capacitor': 'Sua vida aumentou 50 pontos!',
                        'Jaleco': 'Voce fugiu da luta após colocar o jaleco pois os jogadores confundiram você com um mecânico'},
-        'teleporte_opcoes':{'Catraca':'Você volta para o local do começo da jornada', 'DSoft':'Você volta para a sala de DSoft', 'Corredor':'Você volta ao corredor do quarto andar e continua sua jornada',},
-        'teleporte_consequencias':{'Catraca':'Ao chegar na catraca você decide passar no balcão e acaba encontrando o recepcionista. Você tem direito a fazer uma pergunta a ele!', 'DSoft':'Você passa com mais cuidado na sala de DSoft e encontra um carregador, use-o apenas uma vez apenas para encontrar itens escondidos','Corredor':'Você decide não gastar mais tempo e segue rumo ao seu destino'},  
-        'balcao_opcoes':{'Historia':'O recepcionista irá te contar uma história inspiradora','Convencer':'você tentará convencer o recepcionista a te dar alguma coisa'},
-        'balcao_consequencias':{'Historia':'Você ainda é muito novo para ficar pegando DP garoto, siga seus sonhos e entregue o trabalho!!!','Convencer1':'O recepcionista te dá um fora','Convencer2':'O recepcionista te concebe um capacitor!'}
-
+        'teletransportador_consequencias': {'Ibiza': 'Você acertou! Seu professor estava tentando tirar folga de alunos como você que não param de encher o saco! Você tera alguns minutos para conversar com ele antes que os alunos te teletransportem de volta',
+                                            'Outra': 'Você errou! Agora vão te teletransportar para o vestiario dos jogadores de rugby!'},
+        'profe_encontro': {'Fala': 'Não acredito que você veio me encher o saco aqui, mas devido ao seu esforço vou te dar uma chance de adiar o EP1. Caso você saiba qual é a sala virando a direita de DesSoft você deverá se teletransportar para lá e achar um bilhete que eu escrevi, so então vou adiar o EP.'},                   
+        'final': {'Certo': 'Você acertou! Você achou o bilhete no chão da sala de IntruMed, nele estava escrito: O EP é e sempre foi para a semana que vem. FIM. Voce ganhou!',
+                  'Errado': 'Como você não sabia a sala o teletransportador explodiu e você morreu :('},
         }
 
 
@@ -50,11 +49,6 @@ print()
 
 
 def main():
-    pygame.init()
-    pygame.display.set_mode((200,100))
-    pygame.mixer.music.load("SONIC.mp3")
-    pygame.mixer.music.set_volume(0.5)
-    pygame.mixer.music.play(1)
     game_over = False
     vida= 100
     dano_seu= random.randint(10, 41)
@@ -66,7 +60,10 @@ def main():
     vida_rugby_titular = 40
     dano_rugby_titular = random.randint(8, 21)
     inventário = ['Sair']
-    resposta_recepcionista = random.randint(0,1)
+    luta_rugby=False
+    encontro= False
+    vida_rugby_capitao = 130
+    dano_rugby_capitao = random.randint(15, 70)
     
 ########################## CENA 1 #############################################
 
@@ -128,6 +125,8 @@ def main():
             elif escolha == 'Brigar':
                 print()
                 while vida_rugby_pequeno>0:
+                    print('O jogador de rugby tem {} de vida'.format(vida_rugby_pequeno))
+                    print()
                     print('Você tem {0} de vida'.format(vida))
                     escolha= input('Você quer: Atacar | Fugir? ')
                     if escolha == 'Atacar':
@@ -138,6 +137,7 @@ def main():
                             print('O jogador de rugby te bateu!')
                             vida= vida - dano_rugby_pequeno
                             print('Você agora tem {0} de vida'.format(vida))
+                            print()
                         elif vida_rugby_pequeno <= 0:
                             print('Você matou o jogador de rugby e agora pode seguir adiante, mas cuidado, agora tem um time todo de rugby atrás de você!')
                             print()
@@ -168,6 +168,8 @@ def main():
             print()
             vida= vida- dano_rugby_pequeno
             while vida_rugby_pequeno>0 and vida>0 and not game_over:
+                print('O jogador de rugby tem {} de vida'.format(vida_rugby_pequeno))
+                print()
                 print('Você tem {0} de vida'.format(vida))
                 escolha= input('Você quer: Atacar | Fugir? ')
                 if escolha == 'Atacar':
@@ -177,6 +179,7 @@ def main():
                         print('O jogador de rugby agora tem {} de vida'.format(vida_rugby_pequeno))
                         print()
                         print('O jogador de rugby te bateu!')
+                        print()
                         vida= vida - dano_rugby_pequeno
                         if vida<0:
                             print('O jogador de rugby te matou :(')
@@ -239,6 +242,8 @@ def main():
             print()
             vida= vida- dano_rugby_titular
             while vida_rugby_titular>0 and not game_over:
+                print('O jogador de rugby tem {} de vida'.format(vida_rugby_titular))
+                print()
                 print('Você tem {0} de vida'.format(vida))
                 escolha= input('Você quer: Atacar | Fugir? ')
                 if escolha == 'Atacar':
@@ -251,6 +256,7 @@ def main():
                         print('O jogador de rugby agora tem {} de vida'.format(vida_rugby_titular))
                         print()
                         print('O jogador de rugby te bateu!')
+                        print()
                         vida= vida - dano_rugby_titular
                         if vida<0:
                             print('O jogador de rugby te matou :(')
@@ -303,13 +309,15 @@ def main():
 ########################## SUBCENA 3 ##########################################
 
     if not game_over:
-        if azar < 3:
-            print('Indo para o seu próximo destino você encontra um jogador de rugby. Desta vez voce encontra um jogador titular do time, que é mais grande e forte que os anteriores, e você tem que lutar!')
+        if azar < 5:
+            print('Indo para o seu próximo destino você encontra um jogador de rugby. O jogador titular do time e é mais grande e forte que de costume, e você tem que lutar!')
             print()
             print('O jogador de rugby te bateu de surpresa!')
             print()
             vida= vida- dano_rugby_titular
             while vida_rugby_titular>0 and not game_over:
+                print('O jogador de rugby tem {} de vida'.format(vida_rugby_titular))
+                print()
                 print('Você tem {0} de vida'.format(vida))
                 escolha= input('Você quer: Atacar | Fugir | Inventario? ')
                 if escolha == 'Atacar':
@@ -366,61 +374,140 @@ def main():
 ########################## CENA 5 #############################################
 
     if not game_over:
-        print("A aventura do herói continua em sua jornada pelo adiamento do EP de DSoft...")
-        print("Após sua luta com o jogador de Rugby, o herói tira uma pausa para descansar. Durante sua pausa, em meio à tudo que ocorreu até agora, o herói se lembra das dificuldades que teve que superar para chegar onde está agora.")
-        print("---------")
-        print("~Você agora terá a oportunidade de se teleportar para uma das salas que visitou até o momento e encontrar monstros, prêmios ou uma outra surpresa...~")
-        opcoes = cenarios['teleporte_opcoes'].keys()
-        for key, value in cenarios['teleporte_opcoes'].items():
-             print("{}: {}".format(key, value))
-             print()
-        escolha = input("Para onde desejas ir?")
-        if escolha in opcoes:
-            if escolha == 'DSoft':
-                print()
-                print(cenarios['teleporte_consequencias']['Dsoft'])
-                inventário.append("Carregador")
-            elif escolha == 'Catraca':
-                print()
-                print(cenarios['teleporte_consequencias']['Catraca'])
-                opcoes = cenarios['balcao_opcoes'].keys()
-                for key, value in cenarios['balcao_opcoes'].items():
-                    print("{}: {}".format(key, value))
-                    print()
-                escolha = input("O que desejas perguntar?")
-                if escolha in opcoes:
-                    if escolha == 'Historia':
-                        print()
-                        print(cenarios['balcao_consequencias']['Historia'])
-                    elif escolha == 'Convencer':
-                        print()
-                        if resposta_recepcionista == 1:
-                            print(cenarios['balcao_consequencias']['Convencer2'])
-                            inventário.append("Capacitor")
-                        else:
-                            print(cenarios['balcao_consequencias']['Convencer1'])
-            elif escolha == 'Corredor':
-                print()
-                print(cenarios['teleporte_consequencias']['Corredor'])
+        print()
+        print('A procura continua')
+        print('------------------')
+        print()
+        print('Como o aluno dedicado que você é, você decide ir até a biblioteca para ver se encontra o professor. Chegando lá você descobre que em um dos aquários os alunos de engenharia acabaram de inventar um teletransportador! Eles pediram que você seja o primeiro a testar. No entanto, eles dizem, você tem que saber exatamente onde está o professor de DesSoft, caso contrário vão te teletransportar para o vestiario dos jogadores de rugby!')
+        print()
+        escolha= input('Em que lugar está o professor de DesSoft? A resposta etá na frase: Iguana boa ignorou zebra azul. ')
+        print()
+        if escolha=='Ibiza':
+            print(cenarios['teletransportador_consequencias']['Ibiza'])
+            print()
+            encontro= True
         else:
-            print('Escreva certo da próxima vez...')
-            game_over = True
+            print(cenarios['teletransportador_consequencias']['Outra'])
+            luta_rugby=True
 
 
-                
-########################## CENA 6 #############################################
+
+########################## Cena 6 #############################################
     
     
     
+    if not game_over and not luta_rugby:
+       print()
+       print('O encontro')
+       print('----------')
+       print()
+       print('Você achou o professor no meio da praia e ele disse:')
+       print(cenarios['profe_encontro']['Fala'])
+       print()
+       print('Os alunos, logo depois da fala do professor, te teletransportaram de volta ao aquário')
+       print()
+       
+########################## Subcena 4 ##########################################
+
+    if not game_over and not encontro:
+        print()
+        print('Você foi teletransportado para o vestiario do time. O capitão do time en†ão vem a você e diz: Se você me vencer em batalha eu digo onde está o seu professor de DesSoft.')
+        print()
+        while vida_rugby_capitao>0 and not game_over:
+            print('O jogador de rugby tem {} de vida'.format(vida_rugby_capitao))
+            print()
+            print('Você tem {0} de vida'.format(vida))
+            escolha= input('Você quer: Atacar | Fugir | Inventario? ')
+            if escolha == 'Atacar':
+                if not bola:
+                    vida_rugby_capitao= vida_rugby_capitao - dano_seu
+                else:
+                    vida_rugby_capitao= vida_rugby_capitao - dano_bola
+                print()
+                if vida_rugby_capitao>0:
+                    print('O jogador de rugby agora tem {} de vida'.format(vida_rugby_capitao))
+                    print()
+                    print('O jogador de rugby te bateu!')
+                    print()
+                    vida= vida - dano_rugby_capitao
+                    if vida<=0:
+                        print('O jogador de rugby te matou :(')
+                        game_over=True
+                elif vida_rugby_capitao <= 0:
+                    print('Você matou o jogador de rugby e, no seu último suspiro, ele te disse que seu professor estava em Ibiza.')
+                    print()
+            elif escolha == 'Fugir':
+                print()
+                print(cenarios['briga_consequencias']['Fugir'])
+                game_over=True
+                vida_rugby_capitao= 0
+            elif escolha == 'Inventario':
+                print()
+                print(inventário)
+                escolha=input('Que item você deseja escolher? ')
+                if escolha in inventário:
+                    if escolha == 'Jaleco':
+                        print()
+                        print(cenarios['inventario']['Jaleco'])
+                        vida_rugby_capitao=0
+                        inventário.remove('Jaleco')
+                    elif escolha == 'Capacitor':
+                        print()
+                        print(cenarios['inventario']['Capacitor'])
+                        vida = vida +50
+                        print('Você agora tem {0} de vida'.format(vida))
+                        inventário.remove('Capacitor')
+                    elif escolha == 'Sair':
+                        print()
+                        escolha= input('Você quer: Atacar | Fugir | Inventario? ')
+                else:
+                    print()
+                    print('Ou esse item não existe ou você escreveu errado. Tente novamente')
+                    escolha= input('Você quer: Atacar | Fugir | Inventario? ')
+            else:
+                print()
+                print('Como a sua escolha não estava nas opções ou você não sabe escrever direito você morreu de um ataque cardíaco repentino.')
+                game_over=True
+        vida_rugby_capitao = 130
+        print()
+        print('Segundos depois os alunos te teleportam de volta para a sala da teletransportadora. Lá você fala para eles te teletransportarem para Ibiza.')
+
+########################## Cena 6(2) ##########################################
+
+
+    if not game_over and luta_rugby:
+       print()
+       print('O encontro')
+       print('----------')
+       print()
+       print('Você achou o professor no meio da praia e ele disse:')
+       print(cenarios['profe_encontro']['Fala'])
+       print()
+       print('Os alunos, logo depois da fala do professor, te teletransportaram de volta ao aquário')
+       print()
+
+########################## Cena 7 ##########################################
+       
     if not game_over:
         print()
-        print("Após sua breve pausa para teleportar para uma sala, o jogador decide voltar a embarcar na sua viajem para o adiamento do EP")
-        print("Apenas o futuro dirá como irá se desenrolar a história do nosso herói...")
-        print("Obrigado por jogar a primeira versão do jogo. Um agradecimento especial ao Dudu, que salvou demais no desenvolvimento do código e ao professor Toshi, que se tudo der certo nos concebe uma notinha boa ;) . Valeu!!")
-                        
-                        
+        print('Última escolha')
+        print('--------------')
+        print()
+        print('Você avisa aos alunos que você precisa se teletransportar para a sala a direita da sala de DesSoft. No entanto ninguem sabe qual é, então cabe a você avisar o nome da sala. Caso você não informe o nome certo a máquina de teletransporte irá explodir e você irá morrer.')
+        print()
+        escolha=input('Qual é o nome da sala a direita da de DesSoft? ')
+        if escolha == 'InstruMed' or escolha=='Instrumentacao e Medicao' or escolha == 'instrumed' or escolha=='instrumentacao e medicao' or escolha=='Sala de InstruMed' or escolha=='Sala de Instrumentacao e Medicao':
+            print()
+            print(cenarios['final']['Certo'])
+        else:
+            print()
+            print(cenarios['final']['Errado'])
+            game_over= True
+        
+        
+        
 
-
+print(main())
 
 
 
