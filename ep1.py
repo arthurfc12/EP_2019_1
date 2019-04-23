@@ -1,4 +1,5 @@
 from numpy import random
+import pygame
 
 cenarios = {
         'catraca_opcoes': {"Paquerar segurança": "Você tentará cortejar a/o segurança usando seu charme para te deixar passar sem a carteirinha", 
@@ -49,6 +50,11 @@ print()
 
 
 def main():
+    pygame.init()
+    pygame.display.set_mode((200,100))
+    pygame.mixer.music.load("SONIC.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(1)
     game_over = False
     vida= 100
     dano_seu= random.randint(10, 41)
