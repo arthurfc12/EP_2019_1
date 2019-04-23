@@ -50,11 +50,6 @@ print()
 
 
 def main():
-    pygame.init()
-    pygame.display.set_mode((200,100))
-    pygame.mixer.music.load("SONIC.mp3")
-    pygame.mixer.music.set_volume(0.5)
-    pygame.mixer.music.play(1)
     game_over = False
     vida= 100
     dano_seu= random.randint(10, 41)
@@ -71,6 +66,33 @@ def main():
     vida_rugby_capitao = 130
     dano_rugby_capitao = random.randint(15, 70)
     
+    print("Facil , Medio, Dificil")
+    dificuldade = input("Escolha sua dificuldade:")
+    
+    if dificuldade == 'Facil':
+        vida_rugby_pequeno = 20
+        dano_rugby_pequeno = random.randint(1, 11)
+        vida_rugby_titular = 40
+        dano_rugby_titular = random.randint(8, 21)
+        vida_rugby_capitao = 130
+        dano_rugby_capitao = random.randint(15, 70)
+        
+    elif dificuldade == 'Medio':
+        vida_rugby_pequeno = 30
+        dano_rugby_pequeno = random.randint(3, 15)
+        vida_rugby_titular = 50
+        dano_rugby_titular = random.randint(11, 24)
+        vida_rugby_capitao = 140
+        dano_rugby_capitao = random.randint(25, 70)
+        
+    elif dificuldade == 'Dificil':     
+        vida_rugby_pequeno = 50
+        dano_rugby_pequeno = random.randint(15, 20)
+        vida_rugby_titular = 65
+        dano_rugby_titular = random.randint(25, 37)
+        vida_rugby_capitao = 160
+        dano_rugby_capitao = random.randint(45, 85)    
+        
 ########################## CENA 1 #############################################
 
     if not game_over:
